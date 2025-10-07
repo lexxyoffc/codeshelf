@@ -1,0 +1,22 @@
+[
+  {
+    "kategori": "OpenAI",
+    "fitur": [
+      {
+        "judul": "OpenAI Chat",
+        "deskripsi": "Fitur untuk nanya ke OpenAI langsung dari WhatsApp.",
+        "case": "code/case/openai.js"
+      }
+    ]
+  },
+  {
+    "kategori": "Downloader",
+    "fitur": [
+      {
+        "judul": "YouTube Downloader",
+        "deskripsi": "Download video atau audio dari YouTube dengan cepat.",
+        "case": "code/case/downloader.js"
+      }
+    ]
+  }
+]

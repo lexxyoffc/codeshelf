@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodeShelf</title>
+  <style>
+  body {
+    background: #0d0d0d;
+    font-family: Arial, sans-serif;
+    color: #e5e5e5;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* agar full tinggi layar */
+  }
+  
+  main {
+    flex: 1; /* isi konten biar dorong footer ke bawah */
+  }
+  
+  header {
+    text-align: left;
+    margin-bottom: 20px;
+  }
+
+  header h1 {
+    font-size: 26px;
+    font-weight: bold;
+    color: #a78bfa;
+    margin-bottom: 8px;
+  }
+
+  header p {
+    font-size: 15px;
+    color: #bbb;
+    margin-bottom: 12px;
+  }
+
+  header a {
+    display: block;
+    color: #a78bfa;
+    text-decoration: underline;
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+
+  header a:hover {
+    opacity: 0.8;
+  }
+  
+  .rainbow-text {
+    font-size: 36px;
+    font-weight: bold;
+    background: linear-gradient(90deg, #a78bfa, #3a7bd5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: hueShift 10s linear infinite;
+  }
+
+  @keyframes hueShift {
+    from { filter: hue-rotate(0deg); }
+    to   { filter: hue-rotate(360deg); }
+  }
+
+  .version {
+    text-align: center;
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 20px;
+  }
+
+  .category {
+    margin: 20px 0;
+  }
+  .category h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #a78bfa;
+  }
+
+  .card {
+    background: #1a1a1a;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+  }
+  .card-info {
+    flex: 1;
+  }
+  .card h3 {
+    margin: 0;
+    font-size: 16px;
+  }
+  .card p {
+    margin: 3px 0 0;
+    font-size: 13px;
+    color: #aaa;
+  }
+
+  .btn {
+    background: #a78bfa;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+    margin-left: 8px;
+  }
+  .btn:first-child {
+    margin-left: 0;
+  }
+  .btn:hover {
+    opacity: 0.8;
+  }
+
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  
+  .modal.show {
+    display: flex;
+  }
+
+  .modal-content {
+    background: #1e1e1e;
+    padding: 20px;
+    border-radius: 10px;
+    width: 320px;
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .modal.hide .modal-content {
+    animation: fadeOut 0.3s ease;
+  }
+  
+  pre {
+    background: #0d1117;
+    padding: 10px;
+    border-radius: 6px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    color: #fff;
+  }
+  .modal-buttons {
+    margin-top: 10px;
+    text-align: right;
+  }
+  .modal-buttons button {
+    margin-left: 5px;
+    background: #a78bfa;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: white;
+  }
+  
+    #loadingScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #1a1a1a;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 1s ease, visibility 1s ease;
+  }
+
+  .spinner {
+    border: 8px solid #2c2c2c;
+    border-top: 8px solid #3a7bd5;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+  }
+
+  .loading-text {
+    font-size: 24px;
+    font-family: monospace;
+    color: #f5f5f5;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  #loadingText::after {
+    content: "";
+    animation: dots 1s steps(4, end) infinite;
+  }
+
+  @keyframes dots {
+    0% { content: ""; }
+    25% { content: "."; }
+    50% { content: ".."; }
+    75% { content: "..."; }
+    100% { content: ""; }
+  }
+  
+  #searchInput {
+    width: 465px;
+    max-width: 92%;
+    padding: 12px 15px;
+    margin: 20px 0;
+    border: 1px solid #333;
+    border-radius: 10px;
+    background: #111;
+    color: #f5f5f5;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.2s ease;
+  }
+
+  #searchInput:focus {
+    border-color: #a78bfa;
+    box-shadow: 0 0 8px rgba(167, 139, 250, 0.5);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0
+    } to
+    {
+      opacity: 1
+    }
+  }
+  @keyframes fadeOut {
+    from {
+      opacity: 1
+    } to
+    {
+      opacity: 0
+    }
+  }
+  
+  footer {
+  text-align: center;
+  padding: 15px;
+  background-color: rgba(26, 26, 26, 0.5); /* transparan */
+  color: #888;
+  margin-top: auto; /* biar selalu nempel bawah */
+}
+  </style>
+</head>
+<body>
+
+  <div id="loadingScreen">
+  <div class="spinner"></div>
+  <div class="loading-text" id="loadingText">Loading</div>
+</div>
+
+<header>
+  <h1 class="rainbow-text">Explore my CodeShelf!</h1>
+  <p>A simple code shelf for your WhatsApp bot.</p>
+  <a href="https://wa.me/6287865640878">Channel WhatsApp</a>
+  <a href="https://wa.me/6287865640878">Contact Me</a>
+</header>
+
+<input type="text" id="searchInput" placeholder="Search Features...">
+<div id="results"></div>
+
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <pre id="codeBox">kode muncul di sini</pre>
+    <div class="modal-buttons">
+      <button id="copyBtn">Copy</button>
+      <button id="closeBtn">Back</button>
+    </div>
+  </div>
+</div>
+
+  <script>
+    const modal = document.getElementById("modal");
+    const codeBox = document.getElementById("codeBox");
+    const closeBtn = document.getElementById("closeBtn");
+    const copyBtn = document.getElementById("copyBtn");
+
+  let fiturList = [];
+
+  fetch("data.json")
+    .then(res => res.json())
+    .then(data => {
+      fiturList = data;
+      renderResults(fiturList);
+    });
+
+  const searchInput = document.getElementById("searchInput");
+  const results = document.getElementById("results");
+
+  function renderResults(list) {
+  results.innerHTML = list.map(cat => `
+    <div class="category">
+      <h2>${cat.kategori}</h2>
+      ${cat.fitur.map(f => `
+        <div class="card">
+          <div class="card-info">
+            <h3>${f.judul}</h3>
+            <p>${f.deskripsi}</p>
+          </div>
+          <div>
+            ${f.case ? `<button class="btn" data-file="${f.case}">Case</button>` : ""}
+            ${f.handler ? `<button class="btn" data-file="${f.handler}">Handler</button>` : ""}
+            ${f.tambahan ? `<button class="btn" data-file="${f.tambahan}">Tambahan</button>` : ""}
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  `).join("");
+
+  attachButtonEvents();
+}
+
+function attachButtonEvents() {
+  document.querySelectorAll(".btn[data-file]").forEach(btn => {
+    btn.onclick = async () => {
+      const filePath = btn.getAttribute("data-file");
+      try {
+        const res = await fetch(filePath);
+        const code = await res.text();
+        codeBox.textContent = code;
+      } catch {
+        codeBox.textContent = "gagal load file!";
+      }
+      modal.classList.remove("hide");
+      modal.classList.add("show");
+      modal.style.display = "flex";
+    };
+  });
+}
+
+  searchInput.addEventListener("input", () => {
+  const keyword = searchInput.value.toLowerCase();
+
+  const filtered = fiturList.map(cat => ({
+    kategori: cat.kategori,
+    fitur: cat.fitur.filter(f =>
+      f.judul.toLowerCase().includes(keyword) ||
+      f.deskripsi.toLowerCase().includes(keyword)
+    )
+  })).filter(cat => cat.fitur.length > 0);
+
+  renderResults(filtered.length > 0 ? filtered : []);
+});
+
+  async function showCode(path) {
+  try {
+    const res = await fetch(path);
+    const code = await res.text();
+    codeBox.textContent = code;
+    modal.style.display = "flex";
+  } catch (e) {
+    codeBox.textContent = "gagal load kode";
+    modal.style.display = "flex";
+  }
+}
+
+function closeModal() {
+  modal.style.display = "none";
+}
+
+    closeBtn.addEventListener("click", () => {
+      modal.classList.remove("show");
+      modal.classList.add("hide");
+      setTimeout(() => modal.style.display = "none", 300);
+    });
+
+    copyBtn.addEventListener("click", () => {
+      navigator.clipboard.writeText(codeBox.textContent);
+      copyBtn.textContent = "Copied!";
+      setTimeout(() => copyBtn.textContent = "Copy", 2000);
+    });
+
+    const observer = new MutationObserver(() => {
+      if (modal.classList.contains("show")) {
+        modal.style.display = "flex";
+      }
+    });
+    observer.observe(modal, { attributes: true });
+    
+    document.addEventListener("DOMContentLoaded", () => {
+  const loading = document.getElementById("loadingScreen");
+  if (loading) {
+    setTimeout(() => {
+      loading.style.opacity = 0;
+      setTimeout(() => {
+        loading.style.display = "none";
+        document.body.style.overflow = "auto";
+      }, 1000);
+    }, 1500);
+  }
+});
+  </script>
+  
+<footer>
+  &copy; 2025 Lexxy Official - All Rights Reserved
+</footer>
+
+</body>
+</html>
