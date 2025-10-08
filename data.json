@@ -18,5 +18,15 @@
         "case": "code/case/downloader.js"
       }
     ]
+  },
+  {
+    "kategori": "Lainnya",
+    "fitur": [
+      {
+        "judul": "JSON Checker",
+        "deskripsi": "Memeriksa dan menampilkan validitas teks JSON.",
+        "case": "code/case/cekjson.js"
+      }
+    ]
   }
 ]
