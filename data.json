@@ -13,9 +13,9 @@
     "kategori": "Downloader",
     "fitur": [
       {
-        "judul": "YouTube Downloader",
-        "deskripsi": "Download video atau audio dari YouTube dengan cepat.",
-        "case": "code/case/downloader.js"
+        "judul": "MediaFire Downloader",
+        "deskripsi": "untuk mengunduh dan mengirim file langsung dari link MediaFire.",
+        "case": "code/case/mediafire.js"
       }
     ]
   },
